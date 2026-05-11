@@ -1,0 +1,12 @@
+# Compiled output
+dist
+node_modules
+*.log
+
+# Environment variables
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
