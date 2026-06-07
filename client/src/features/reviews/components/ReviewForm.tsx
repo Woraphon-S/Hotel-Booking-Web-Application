@@ -5,23 +5,42 @@ import { Star, MessageSquare, Send } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { useAuthStore } from '@/stores/authStore';
 import { reviewService } from '../services/review.service';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { bookingService } from '@/features/booking/services/booking.service';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface ReviewFormProps {
   propertyId: number;
 }
 
 export const ReviewForm = ({ propertyId }: ReviewFormProps) => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const [rating, setRating] = React.useState(5);
   const [comment, setComment] = React.useState('');
   const [hoveredRating, setHoveredRating] = React.useState(0);
   const queryClient = useQueryClient();
 
+  // Reviews require a booking: find one of the user's stayed/confirmed bookings for this property
+  const { data: myBookings } = useQuery({
+    queryKey: ['my-bookings'],
+    queryFn: () => bookingService.getMyBookings(),
+    enabled: isAuthenticated,
+  });
+
+  const eligibleBooking = React.useMemo(
+    () =>
+      (myBookings || []).find(
+        (b: any) =>
+          b.property_id === propertyId &&
+          (b.status === 'confirmed' || b.status === 'completed'),
+      ),
+    [myBookings, propertyId],
+  );
+
   const mutation = useMutation({
     mutationFn: (data: any) => reviewService.createReview(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['property-reviews', propertyId] });
+      queryClient.invalidateQueries({ queryKey: ['property-details', propertyId] });
       setComment('');
       setRating(5);
       alert('ขอบคุณสำหรับรีวิวของคุณ!');
@@ -33,15 +52,24 @@ export const ReviewForm = ({ propertyId }: ReviewFormProps) => {
 
   if (!isAuthenticated) return null;
 
+  // Only guests who have a confirmed/completed booking at this property can review
+  if (!eligibleBooking) {
+    return (
+      <div className="bg-white p-6 rounded-2xl border border-border shadow-sm mb-8 text-center text-sm text-muted-foreground">
+        <MessageSquare size={18} className="mx-auto mb-2 text-muted-foreground/60" />
+        เฉพาะผู้ที่เคยจองและเข้าพักที่นี่แล้วเท่านั้นจึงจะเขียนรีวิวได้
+      </div>
+    );
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!comment.trim()) return;
-    
-    // In a real app, we need a bookingId. For demo, we'll use a placeholder or let the backend handle it.
+
     mutation.mutate({
-      propertyId, // Backend might need bookingId instead, adjust as needed
+      bookingId: eligibleBooking.id,
       rating,
-      comment
+      comment,
     });
   };
 

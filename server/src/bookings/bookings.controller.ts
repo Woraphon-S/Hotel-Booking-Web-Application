@@ -19,7 +19,7 @@ export class BookingsController {
   }
 
   @Get(':id')
-  async getOne(@Param('id', ParseIntPipe) id: number) {
-    return this.bookingsService.getBooking(id);
+  async getOne(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: any) {
+    return this.bookingsService.getBookingForUser(id, user.userId);
   }
 }

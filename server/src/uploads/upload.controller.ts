@@ -1,4 +1,4 @@
-import { Controller, Post, UseInterceptors, UploadedFiles, UseGuards, Logger } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFiles, UseGuards, Logger, BadRequestException } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
@@ -31,8 +31,11 @@ export class UploadController {
         },
       }),
       fileFilter: (req, file, callback) => {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/)) {
-          return callback(new Error('Only image files are allowed!'), false);
+        if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/i)) {
+          return callback(
+            new BadRequestException('อนุญาตให้อัปโหลดเฉพาะไฟล์รูปภาพ (jpg, jpeg, png, webp) เท่านั้น'),
+            false,
+          );
         }
         callback(null, true);
       },
@@ -43,6 +46,9 @@ export class UploadController {
   )
   uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
     this.logger.log(`Received ${files?.length || 0} files`);
+    if (!files || files.length === 0) {
+      throw new BadRequestException('ไม่พบไฟล์ที่อัปโหลด');
+    }
     const urls = files.map((file) => `/uploads/${file.filename}`);
     return { urls };
   }

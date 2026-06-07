@@ -24,7 +24,6 @@ export class UsersService {
   }
 
   async updateRefreshToken(userId: number, refreshToken: string | null): Promise<void> {
-    // Note: In production, hash the refresh token before storing
     const hashedToken = refreshToken ? await bcrypt.hash(refreshToken, 10) : null;
     await this.usersRepository.updateRefreshToken(userId, hashedToken);
   }

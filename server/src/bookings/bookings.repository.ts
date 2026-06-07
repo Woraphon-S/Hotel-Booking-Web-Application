@@ -47,7 +47,7 @@ export class BookingsRepository {
 
   async findByUserId(userId: number) {
     const res = await this.db.query(
-      `SELECT b.*, r.name as room_name, p.name as property_name
+      `SELECT b.*, r.name as room_name, p.id as property_id, p.name as property_name, p.city as property_city
        FROM bookings b
        JOIN rooms r ON b.room_id = r.id
        JOIN properties p ON r.property_id = p.id

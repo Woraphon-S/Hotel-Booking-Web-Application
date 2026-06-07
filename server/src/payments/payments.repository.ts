@@ -21,17 +21,4 @@ export class PaymentsRepository {
     );
     return res.rows[0];
   }
-
-  async findByBookingId(bookingId: number) {
-    const res = await this.db.query('SELECT * FROM payments WHERE booking_id = $1', [bookingId]);
-    return res.rows[0] || null;
-  }
-
-  async updateStatus(id: number, status: string, paidAt?: Date) {
-    const res = await this.db.query(
-      'UPDATE payments SET status = $1, paid_at = COALESCE($2, paid_at) WHERE id = $3 RETURNING *',
-      [status, paidAt, id]
-    );
-    return res.rows[0];
-  }
 }

@@ -27,11 +27,14 @@ const propertySchema = z.object({
   amenities: z.array(z.string()).default([]),
 });
 
-type PropertyFormValues = z.infer<typeof propertySchema>;
+// The schema uses preprocess/default, so the raw input type (form fields) differs
+// from the parsed output type (validated values passed to onSubmit).
+type PropertyFormInput = z.input<typeof propertySchema>;
+type PropertyFormValues = z.output<typeof propertySchema>;
 
 interface PropertyFormProps {
   propertyId?: number;
-  initialValues?: Partial<PropertyFormValues> & { images?: any[] };
+  initialValues?: Partial<PropertyFormInput> & { images?: any[] };
   onSubmit: (data: PropertyFormValues & { images?: string[] }) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
@@ -58,7 +61,7 @@ export const PropertyForm = ({ propertyId, initialValues, onSubmit, onCancel, is
     setValue,
     watch,
     formState: { errors },
-  } = useForm<PropertyFormValues>({
+  } = useForm<PropertyFormInput, unknown, PropertyFormValues>({
     resolver: zodResolver(propertySchema),
     defaultValues: initialValues || { amenities: [] },
   });

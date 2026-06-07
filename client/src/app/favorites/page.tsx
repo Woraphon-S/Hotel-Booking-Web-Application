@@ -14,14 +14,11 @@ import { Button } from '@/components/ui/Button';
 export default function FavoritesPage() {
   const { favoriteIds } = useFavoriteStore();
   
-  // In a real app, we'd have an API to fetch multiple properties by IDs.
-  // For now, we'll fetch all and filter, or just fetch if there are IDs.
+  // Saved properties are resolved from the favorite ids kept in local state
   const { data: properties, isLoading } = useQuery({
     queryKey: ['favorite-properties', favoriteIds],
     queryFn: async () => {
       if (favoriteIds.length === 0) return [];
-      // Fetching all properties and filtering for demo
-      // In production, use: apiClient.get(`/properties/batch?ids=${favoriteIds.join(',')}`)
       const all = await searchService.searchProperties({});
       return all.filter((p: any) => favoriteIds.includes(p.id));
     },

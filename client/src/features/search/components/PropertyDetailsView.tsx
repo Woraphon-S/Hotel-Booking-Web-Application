@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Star, MapPin, Loader2, Check, X } from 'lucide-react';
 import { ReviewList } from '@/features/reviews/components/ReviewList';
 import { ReviewForm } from '@/features/reviews/components/ReviewForm';
+import { useAuthStore } from '@/stores/authStore';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -19,10 +20,13 @@ interface PropertyDetailsViewProps {
 
 export const PropertyDetailsView = ({ propertyId }: PropertyDetailsViewProps) => {
   const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
+  const { user } = useAuthStore();
   const { data: property, isLoading } = useQuery({
     queryKey: ['property-details', propertyId],
     queryFn: () => searchService.getPropertyDetails(propertyId),
   });
+
+  const isOwner = !!user && property?.owner_id === user.id;
 
   if (isLoading) {
     return (
@@ -57,7 +61,7 @@ export const PropertyDetailsView = ({ propertyId }: PropertyDetailsViewProps) =>
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Image Gallery - Simple & Clear 5-Image Layout */}
+      {/* 5-image gallery */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-2 h-[500px] md:h-[450px] rounded-2xl overflow-hidden mb-10 shadow-md border border-border">
         {[0, 2, 1, 3, 4].map((index, i) => {
           const img = images[index];
@@ -228,11 +232,13 @@ export const PropertyDetailsView = ({ propertyId }: PropertyDetailsViewProps) =>
       <div className="mt-16 pt-12 border-t border-border">
         <div className="flex flex-col md:flex-row gap-12">
           <div className="flex-1">
-            <ReviewList propertyId={propertyId} />
+            <ReviewList propertyId={propertyId} isOwner={isOwner} />
           </div>
-          <div className="w-full md:w-96">
-            <ReviewForm propertyId={propertyId} />
-          </div>
+          {!isOwner && (
+            <div className="w-full md:w-96">
+              <ReviewForm propertyId={propertyId} />
+            </div>
+          )}
         </div>
       </div>
     </div>

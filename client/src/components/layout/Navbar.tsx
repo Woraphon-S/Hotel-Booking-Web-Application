@@ -17,6 +17,13 @@ export const Navbar = () => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
+  // Persisted Zustand stores rehydrate on the client only — gate auth/language
+  // rendering until after mount to avoid SSR/client hydration mismatch (flash).
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  const displayAuth = mounted && isAuthenticated;
+  const displayLang = mounted ? language : 'th';
+
   const handleLogout = async () => {
     if (user) {
       try {
@@ -48,16 +55,16 @@ export const Navbar = () => {
               onClick={toggleLanguage}
               className="w-12 h-8 flex items-center justify-center text-xs border border-white/20 rounded-md hover:bg-white/10 transition-colors uppercase font-bold"
             >
-              {language === 'th' ? 'EN' : 'TH'}
+              {displayLang === 'th' ? 'EN' : 'TH'}
             </button>
 
             <Link href="/#search-section" className="hover:text-accent transition-colors">{t('navbar.search')}</Link>
 
             <Link href="/favorites" className="hover:text-accent transition-colors flex items-center">
               <Heart size={18} className="mr-1" />
-              {language === 'th' ? 'ที่บันทึกไว้' : 'Favorites'}
+              {displayLang === 'th' ? 'ที่บันทึกไว้' : 'Favorites'}
             </Link>
-            {isAuthenticated ? (
+            {displayAuth ? (
               <div className="flex items-center space-x-4">
                 <Link 
                   href="/profile" 
@@ -107,7 +114,7 @@ export const Navbar = () => {
         <div className="md:hidden bg-primary border-t border-white/10 px-4 py-4 space-y-3">
           <Link href="/#search-section" className="block py-2 hover:text-accent">ค้นหาที่พัก</Link>
 
-          {isAuthenticated ? (
+          {displayAuth ? (
             <>
               {user?.role === 'owner' && (
                 <Link href="/owner/dashboard" className="block py-2 hover:text-accent">จัดการที่พัก</Link>

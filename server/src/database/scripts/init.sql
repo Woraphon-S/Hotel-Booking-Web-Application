@@ -48,9 +48,17 @@ CREATE TABLE IF NOT EXISTS properties (
     check_out_time TIME DEFAULT '12:00',
     rating_avg DECIMAL(3, 2) DEFAULT 0,
     review_count INTEGER DEFAULT 0,
+    min_price DECIMAL(10, 2) DEFAULT 0,
+    max_price DECIMAL(10, 2) DEFAULT 0,
+    amenities TEXT[] DEFAULT '{}',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Keep existing databases in sync (CREATE TABLE IF NOT EXISTS won't add new columns)
+ALTER TABLE properties ADD COLUMN IF NOT EXISTS min_price DECIMAL(10, 2) DEFAULT 0;
+ALTER TABLE properties ADD COLUMN IF NOT EXISTS max_price DECIMAL(10, 2) DEFAULT 0;
+ALTER TABLE properties ADD COLUMN IF NOT EXISTS amenities TEXT[] DEFAULT '{}';
 
 -- 4. Property Images
 CREATE TABLE IF NOT EXISTS property_images (
@@ -78,9 +86,13 @@ CREATE TABLE IF NOT EXISTS rooms (
     price_per_night DECIMAL(10, 2) NOT NULL,
     capacity INTEGER NOT NULL,
     total_rooms INTEGER NOT NULL DEFAULT 1,
+    image_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Keep existing databases in sync
+ALTER TABLE rooms ADD COLUMN IF NOT EXISTS image_url TEXT;
 
 -- 7. Bookings Table
 CREATE TABLE IF NOT EXISTS bookings (

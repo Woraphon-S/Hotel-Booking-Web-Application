@@ -82,7 +82,7 @@ export default function Home() {
 
       </section>
 
-      {/* Features Section - Premium Redesign */}
+      {/* Features Section */}
       <section className="py-24 bg-gradient-to-b from-white to-muted/30 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute top-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />

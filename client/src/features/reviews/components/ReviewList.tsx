@@ -1,15 +1,107 @@
 'use client';
 
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { reviewService } from '../services/review.service';
-import { Star, MessageSquare } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { Star, MessageSquare, Reply } from 'lucide-react';
 
 interface ReviewListProps {
   propertyId: number;
+  isOwner?: boolean;
 }
 
-export const ReviewList = ({ propertyId }: ReviewListProps) => {
+const ReviewItem = ({
+  review,
+  propertyId,
+  isOwner,
+}: {
+  review: any;
+  propertyId: number;
+  isOwner: boolean;
+}) => {
+  const queryClient = useQueryClient();
+  const [reply, setReply] = React.useState('');
+  const [showReply, setShowReply] = React.useState(false);
+
+  const mutation = useMutation({
+    mutationFn: () => reviewService.replyToReview(review.id, reply),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['property-reviews', propertyId] });
+      setReply('');
+      setShowReply(false);
+    },
+    onError: (err: any) => alert(err.response?.data?.message || 'ตอบกลับไม่สำเร็จ'),
+  });
+
+  return (
+    <div className="bg-white p-6 rounded-xl border border-border">
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-secondary/10 rounded-full flex-center text-secondary font-bold">
+            {review.first_name?.[0] || '?'}
+          </div>
+          <div>
+            <p className="font-bold">{review.first_name || 'ผู้ใช้'} {review.last_name || ''}</p>
+            <p className="text-xs text-muted-foreground">
+              {new Date(review.created_at).toLocaleDateString('th-TH')}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-1 bg-accent/20 px-2 py-1 rounded text-sm font-bold text-accent-foreground">
+          <span>{review.rating}</span>
+          <Star size={12} fill="currentColor" />
+        </div>
+      </div>
+
+      <p className="text-foreground leading-relaxed">{review.comment}</p>
+
+      {review.owner_reply && (
+        <div className="mt-4 p-4 bg-muted/30 rounded-lg border-l-4 border-secondary">
+          <p className="text-xs font-bold text-secondary mb-1">การตอบกลับจากเจ้าของที่พัก</p>
+          <p className="text-sm text-foreground italic">"{review.owner_reply}"</p>
+        </div>
+      )}
+
+      {isOwner && !review.owner_reply && (
+        <div className="mt-4">
+          {showReply ? (
+            <div className="space-y-2">
+              <textarea
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+                className="w-full min-h-[80px] p-3 rounded-lg border border-input focus:ring-2 focus:ring-primary focus:outline-none text-sm"
+                placeholder="ตอบกลับรีวิวนี้ในฐานะเจ้าของที่พัก..."
+              />
+              <div className="flex gap-2 justify-end">
+                <Button variant="outline" size="sm" onClick={() => setShowReply(false)}>
+                  ยกเลิก
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => mutation.mutate()}
+                  isLoading={mutation.isPending}
+                  disabled={!reply.trim()}
+                >
+                  ส่งคำตอบ
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowReply(true)}
+              className="text-sm text-secondary font-medium flex items-center gap-1 hover:underline"
+            >
+              <Reply size={14} /> ตอบกลับรีวิว
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const ReviewList = ({ propertyId, isOwner = false }: ReviewListProps) => {
   const { data: reviews, isLoading } = useQuery({
     queryKey: ['property-reviews', propertyId],
     queryFn: () => reviewService.getPropertyReviews(propertyId),
@@ -26,34 +118,7 @@ export const ReviewList = ({ propertyId }: ReviewListProps) => {
 
       <div className="grid grid-cols-1 gap-6">
         {reviews?.map((review: any) => (
-          <div key={review.id} className="bg-white p-6 rounded-xl border border-border">
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-secondary/10 rounded-full flex-center text-secondary font-bold">
-                  {review.first_name[0]}
-                </div>
-                <div>
-                  <p className="font-bold">{review.first_name} {review.last_name}</p>
-                  <p className="text-xs text-muted-foreground">{new Date(review.created_at).toLocaleDateString('th-TH')}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1 bg-accent/20 px-2 py-1 rounded text-sm font-bold text-accent-foreground">
-                <span>{review.rating}</span>
-                <Star size={12} fill="currentColor" />
-              </div>
-            </div>
-            
-            <p className="text-foreground leading-relaxed">
-              {review.comment}
-            </p>
-
-            {review.owner_reply && (
-              <div className="mt-4 p-4 bg-muted/30 rounded-lg border-l-4 border-secondary">
-                <p className="text-xs font-bold text-secondary mb-1">การตอบกลับจากเจ้าของที่พัก</p>
-                <p className="text-sm text-foreground italic">"{review.owner_reply}"</p>
-              </div>
-            )}
-          </div>
+          <ReviewItem key={review.id} review={review} propertyId={propertyId} isOwner={isOwner} />
         ))}
 
         {reviews?.length === 0 && (

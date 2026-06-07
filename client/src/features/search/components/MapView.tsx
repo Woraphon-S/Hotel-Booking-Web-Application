@@ -35,11 +35,11 @@ const MapView = ({ properties }: MapViewProps) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {properties?.map((property) => {
-          // If property has lat/lng, use it. Otherwise use a random offset from center for demo if needed
-          // Real apps should have latitude/longitude in the property model
+          // Use real lat/lng when present, else a stable id-derived offset near Bangkok
+          const seed = Number(property.id) || 0;
           const position: [number, number] = [
-            Number(property.latitude) || 13.7367 + (Math.random() - 0.5) * 2,
-            Number(property.longitude) || 100.5232 + (Math.random() - 0.5) * 2
+            Number(property.latitude) || 13.7367 + (((seed * 37) % 100) / 100 - 0.5) * 2,
+            Number(property.longitude) || 100.5232 + (((seed * 53) % 100) / 100 - 0.5) * 2
           ];
 
           return (

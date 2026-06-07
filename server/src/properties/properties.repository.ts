@@ -147,10 +147,6 @@ export class PropertiesRepository {
       }
     }
 
-    console.log('--- Updating Property ---');
-    console.log('Fields:', fields);
-    console.log('Params:', params);
-
     let property;
     if (fields.length > 0) {
       params.push(id);

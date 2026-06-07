@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { BookingsRepository } from './bookings.repository';
 import { DatabaseService } from '../database/database.service';
 import { RoomsService } from '../rooms/rooms.service';
@@ -23,8 +23,14 @@ export class BookingsService {
 
     // 2. Start Transaction
     return this.db.transaction(async (client) => {
-      // A. Lock and Check Availability (SELECT FOR UPDATE)
-      // For simplicity, we use the custom availability check within the transaction
+      // A. Lock the room row so concurrent bookings for the same room are serialized
+      // (prevents the availability check race / double booking)
+      const roomLock = await client.query('SELECT id FROM rooms WHERE id = $1 FOR UPDATE', [roomId]);
+      if (roomLock.rows.length === 0) {
+        throw new NotFoundException('Room not found');
+      }
+
+      // B. Check Availability inside the locked transaction
       const isAvailable = await this.bookingsRepository.checkAvailability(
         client,
         roomId,
@@ -63,6 +69,14 @@ export class BookingsService {
   async getBooking(id: number) {
     const booking = await this.bookingsRepository.findById(id);
     if (!booking) throw new NotFoundException('Booking not found');
+    return booking;
+  }
+
+  async getBookingForUser(id: number, userId: number) {
+    const booking = await this.getBooking(id);
+    if (booking.user_id !== userId) {
+      throw new ForbiddenException('คุณไม่มีสิทธิ์เข้าถึงการจองนี้');
+    }
     return booking;
   }
 
