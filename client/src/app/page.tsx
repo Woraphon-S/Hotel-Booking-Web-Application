@@ -29,7 +29,7 @@ export default function Home() {
     { name: 'พัทยา', nameEn: 'Pattaya', img: '/images/destinations/pattaya.jpg', count: language === 'th' ? '520+ ที่พัก' : '520+ Properties' },
   ], [language]);
 
-  if (!mounted) return null; // Prevent hydration mismatch by waiting for mount
+  if (!mounted) return null;
 
 
 
@@ -45,7 +45,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
       <section className="relative h-[600px] flex items-center justify-center text-white">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center">
           <div className="absolute inset-0 bg-black/30" />
@@ -82,9 +81,7 @@ export default function Home() {
 
       </section>
 
-      {/* Features Section */}
       <section className="py-24 bg-gradient-to-b from-white to-muted/30 relative overflow-hidden">
-        {/* Background decorative elements */}
         <div className="absolute top-0 left-0 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
 
@@ -100,7 +97,6 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {/* Feature 1: Safety */}
             <div className="group bg-white/60 backdrop-blur-md p-10 rounded-[2.5rem] border border-white shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 text-center">
               <div className="relative w-20 h-20 mx-auto mb-8">
                 <div className="absolute inset-0 bg-blue-100 rounded-2xl rotate-6 group-hover:rotate-12 transition-transform duration-500" />
@@ -114,7 +110,6 @@ export default function Home() {
               </p>
             </div>
             
-            {/* Feature 2: Best Price */}
             <div className="group bg-white/60 backdrop-blur-md p-10 rounded-[2.5rem] border border-white shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 text-center">
               <div className="relative w-20 h-20 mx-auto mb-8">
                 <div className="absolute inset-0 bg-amber-100 rounded-2xl rotate-6 group-hover:rotate-12 transition-transform duration-500" />
@@ -128,7 +123,6 @@ export default function Home() {
               </p>
             </div>
             
-            {/* Feature 3: Easy Booking */}
             <div className="group bg-white/60 backdrop-blur-md p-10 rounded-[2.5rem] border border-white shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 text-center">
               <div className="relative w-20 h-20 mx-auto mb-8">
                 <div className="absolute inset-0 bg-emerald-100 rounded-2xl rotate-6 group-hover:rotate-12 transition-transform duration-500" />
@@ -145,7 +139,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Popular Destinations Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-end mb-10">
@@ -187,7 +180,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Main Search Experience Section */}
       <section id="search-section" className="py-12 bg-muted/20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="bg-white rounded-[2.5rem] shadow-xl border border-border overflow-hidden">
@@ -199,7 +191,6 @@ export default function Home() {
       </section>
 
 
-      {/* CTA Section */}
       <section className="py-20 bg-primary text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">คุณเป็นเจ้าของที่พักใช่หรือไม่?</h2>

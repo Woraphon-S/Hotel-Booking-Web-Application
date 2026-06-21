@@ -14,23 +14,18 @@ export class BookingsService {
   async createBooking(userId: number, data: any) {
     const { roomId, checkInDate, checkOutDate } = data;
 
-    // 1. Validate dates
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
     if (checkIn >= checkOut) {
       throw new BadRequestException('Check-out date must be after check-in date');
     }
 
-    // 2. Start Transaction
     return this.db.transaction(async (client) => {
-      // A. Lock the room row so concurrent bookings for the same room are serialized
-      // (prevents the availability check race / double booking)
       const roomLock = await client.query('SELECT id FROM rooms WHERE id = $1 FOR UPDATE', [roomId]);
       if (roomLock.rows.length === 0) {
         throw new NotFoundException('Room not found');
       }
 
-      // B. Check Availability inside the locked transaction
       const isAvailable = await this.bookingsRepository.checkAvailability(
         client,
         roomId,
@@ -42,12 +37,10 @@ export class BookingsService {
         throw new BadRequestException('Room is not available for the selected dates');
       }
 
-      // B. Calculate Price
       const room = await this.roomsService.findOne(roomId);
       const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
       const totalPrice = nights * Number(room.price_per_night);
 
-      // C. Create Booking
       const booking = await this.bookingsRepository.create(client, {
         userId,
         roomId,

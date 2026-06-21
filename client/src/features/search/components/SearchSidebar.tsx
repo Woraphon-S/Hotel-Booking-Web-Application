@@ -75,7 +75,6 @@ export const SearchSidebar = ({ onFilterChange, initialFilters }: SearchSidebarP
       </div>
 
       <div className="space-y-6">
-        {/* Basic Search */}
         <div className="space-y-3">
           <Input
             name="name"
@@ -95,7 +94,6 @@ export const SearchSidebar = ({ onFilterChange, initialFilters }: SearchSidebarP
 
         <hr className="border-border" />
 
-        {/* Price Range */}
         <div className="space-y-3">
           <label className="text-sm font-bold">งบประมาณต่อคืน</label>
           <div className="grid grid-cols-2 gap-2">
@@ -120,7 +118,6 @@ export const SearchSidebar = ({ onFilterChange, initialFilters }: SearchSidebarP
 
         <hr className="border-border" />
 
-        {/* Rating Filter */}
         <div className="space-y-3">
           <label className="text-sm font-bold">คะแนนรีวิว</label>
           <div className="flex flex-col gap-2">
@@ -143,7 +140,6 @@ export const SearchSidebar = ({ onFilterChange, initialFilters }: SearchSidebarP
 
         <hr className="border-border" />
 
-        {/* Amenities */}
         <div className="space-y-3">
           <label className="text-sm font-bold">สิ่งอำนวยความสะดวก</label>
           <div className="flex flex-col gap-2">

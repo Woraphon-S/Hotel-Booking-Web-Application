@@ -27,8 +27,6 @@ const propertySchema = z.object({
   amenities: z.array(z.string()).default([]),
 });
 
-// The schema uses preprocess/default, so the raw input type (form fields) differs
-// from the parsed output type (validated values passed to onSubmit).
 type PropertyFormInput = z.input<typeof propertySchema>;
 type PropertyFormValues = z.output<typeof propertySchema>;
 
@@ -81,7 +79,6 @@ export const PropertyForm = ({ propertyId, initialValues, onSubmit, onCancel, is
 
   const handleUploadComplete = (urls: string[]) => {
     setNewImageUrls((prev) => [...prev, ...urls]);
-    // Create temp objects for preview
     const tempImages = urls.map((url, index) => ({
       id: Date.now() + index,
       url,
@@ -90,7 +87,6 @@ export const PropertyForm = ({ propertyId, initialValues, onSubmit, onCancel, is
   };
 
   const handleRemoveImage = async (url: string) => {
-    // Find image in existing images
     const existingImage = images.find((img) => img.url === url);
     
     if (existingImage && propertyId && !newImageUrls.includes(url)) {

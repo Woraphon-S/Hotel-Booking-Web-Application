@@ -24,8 +24,6 @@ export class PaymentsService {
       throw new BadRequestException('กรุณาระบุวิธีการชำระเงิน');
     }
 
-    // Simulated payment gateway — the integration point where a real provider
-    // (e.g. Stripe, Omise) would be charged and its result mapped to a status.
     const payment = await this.paymentsRepository.create({
       bookingId,
       amount: booking.total_price,
@@ -35,7 +33,6 @@ export class PaymentsService {
       paidAt: new Date(),
     });
 
-    // Confirm the booking once payment succeeds
     await this.bookingsService.updateStatus(bookingId, 'confirmed');
 
     return payment;

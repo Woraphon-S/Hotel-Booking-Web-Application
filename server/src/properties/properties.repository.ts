@@ -41,7 +41,6 @@ export class PropertiesRepository {
 
     query += ' GROUP BY p.id';
 
-    // Price filtering (having)
     if (filters.min_price || filters.max_price) {
       query += ' HAVING 1=1';
       if (filters.min_price) {
@@ -54,12 +53,10 @@ export class PropertiesRepository {
       }
     }
 
-    // Sorting
     const sortField = filters.sort_by || 'created_at';
     const sortOrder = filters.sort_order || 'DESC';
     query += ` ORDER BY ${sortField} ${sortOrder}`;
 
-    // Pagination
     const limit = parseInt(filters.limit) || 10;
     const offset = (parseInt(filters.page) - 1) * limit || 0;
     query += ` LIMIT $${paramIndex++} OFFSET $${paramIndex++}`;
@@ -88,7 +85,6 @@ export class PropertiesRepository {
 
   async addImages(propertyId: number, urls: string[]) {
     for (const url of urls) {
-      // Check if it's the first image, if so make it main
       const existingImages = await this.getImages(propertyId);
       const isMain = existingImages.length === 0;
 
@@ -125,7 +121,6 @@ export class PropertiesRepository {
     );
     const property = res.rows[0];
     
-    // If images are provided during creation
     if (data.images && data.images.length > 0) {
       await this.addImages(property.id, data.images);
       property.images = await this.getImages(property.id);

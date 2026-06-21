@@ -16,16 +16,14 @@ interface CheckoutPageProps {
   roomId: number;
 }
 
-// Format a Date as YYYY-MM-DD for <input type="date"> / API
 const toDateInput = (d: Date) => d.toISOString().split('T')[0];
 
 export const CheckoutPage = ({ roomId }: CheckoutPageProps) => {
   const router = useRouter();
   const { user, isAuthenticated } = useAuthStore();
-  const [step, setStep] = React.useState(1); // 1: Details, 2: Payment
+  const [step, setStep] = React.useState(1);
   const [bookingId, setBookingId] = React.useState<number | null>(null);
 
-  // Default to tomorrow → 3 nights, editable by the guest
   const today = React.useMemo(() => toDateInput(new Date()), []);
   const [checkIn, setCheckIn] = React.useState(() => {
     const d = new Date();
@@ -39,7 +37,6 @@ export const CheckoutPage = ({ roomId }: CheckoutPageProps) => {
   });
   const [specialRequests, setSpecialRequests] = React.useState('');
 
-  // Redirect unauthenticated users to login
   React.useEffect(() => {
     if (!isAuthenticated) {
       router.push(`/login?redirect=/booking/${roomId}`);

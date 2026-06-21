@@ -6,7 +6,6 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import Link from 'next/link';
 
-// Fix for default marker icons in Leaflet with Next.js
 const icon = L.icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -19,7 +18,6 @@ interface MapViewProps {
 }
 
 const MapView = ({ properties }: MapViewProps) => {
-  // Default center of Thailand
   const center: [number, number] = [13.7367, 100.5232];
 
   return (
@@ -35,7 +33,6 @@ const MapView = ({ properties }: MapViewProps) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {properties?.map((property) => {
-          // Use real lat/lng when present, else a stable id-derived offset near Bangkok
           const seed = Number(property.id) || 0;
           const position: [number, number] = [
             Number(property.latitude) || 13.7367 + (((seed * 37) % 100) / 100 - 0.5) * 2,

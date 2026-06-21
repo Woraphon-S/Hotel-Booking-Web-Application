@@ -27,7 +27,6 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
       await this.pool.query('SELECT 1');
       this.logger.log('Database connection established successfully');
       
-      // init.sql lives under src (dev) or dist (build) depending on how the app is run
       const initScriptPath = path.join(__dirname, 'scripts', 'init.sql');
       let finalPath = initScriptPath;
       if (!fs.existsSync(finalPath)) {

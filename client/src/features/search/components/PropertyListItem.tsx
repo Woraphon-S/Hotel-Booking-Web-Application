@@ -26,7 +26,6 @@ export const PropertyListItem = ({ property }: PropertyListItemProps) => {
 
   return (
     <div className="relative bg-white flex flex-col md:flex-row rounded-xl shadow-sm border border-border overflow-hidden hover:shadow-md transition-all duration-300 group">
-      {/* Invisible Link covering the entire card */}
       <Link href={`/properties/${property.id}`} className="absolute inset-0 z-10" aria-label={`View details for ${property.name}`} />
       
       <div className="w-full md:w-72 h-52 bg-muted relative overflow-hidden">
@@ -54,7 +53,6 @@ export const PropertyListItem = ({ property }: PropertyListItemProps) => {
           </div>
         )}
         
-        {/* Favorite Button - positioned above the invisible link */}
         <button
           onClick={(e) => {
             e.preventDefault();

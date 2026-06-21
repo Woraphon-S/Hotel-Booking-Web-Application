@@ -25,7 +25,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
       const res = exception.getResponse() as any;
       message = res.message || res;
     } else {
-      // ดักจับ Error อื่นๆ เช่น Database Connection
       const err = exception as any;
       if (err.code === 'ECONNREFUSED') {
         message = 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้';

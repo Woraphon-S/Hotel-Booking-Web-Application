@@ -60,7 +60,6 @@ export class AuthService {
       throw new UnauthorizedException('Access Denied');
     }
 
-    // Verify the refresh token's signature & expiry, then trust its `sub` (not a client-supplied userId)
     let payload: { sub: number };
     try {
       payload = await this.jwtService.verifyAsync(refreshToken, {

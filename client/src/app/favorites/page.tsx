@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/Button';
 export default function FavoritesPage() {
   const { favoriteIds } = useFavoriteStore();
   
-  // Saved properties are resolved from the favorite ids kept in local state
   const { data: properties, isLoading } = useQuery({
     queryKey: ['favorite-properties', favoriteIds],
     queryFn: async () => {

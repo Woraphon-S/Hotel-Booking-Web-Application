@@ -17,8 +17,6 @@ export const Navbar = () => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  // Persisted Zustand stores rehydrate on the client only — gate auth/language
-  // rendering until after mount to avoid SSR/client hydration mismatch (flash).
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
   const displayAuth = mounted && isAuthenticated;
@@ -49,7 +47,6 @@ export const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
             <button 
               onClick={toggleLanguage}
@@ -100,7 +97,6 @@ export const Navbar = () => {
           </div>
 
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 rounded-md hover:bg-primary-foreground/10">
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -109,7 +105,6 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-primary border-t border-white/10 px-4 py-4 space-y-3">
           <Link href="/#search-section" className="block py-2 hover:text-accent">ค้นหาที่พัก</Link>

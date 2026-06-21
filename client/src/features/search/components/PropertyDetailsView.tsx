@@ -61,7 +61,6 @@ export const PropertyDetailsView = ({ propertyId }: PropertyDetailsViewProps) =>
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* 5-image gallery */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-2 h-[500px] md:h-[450px] rounded-2xl overflow-hidden mb-10 shadow-md border border-border">
         {[0, 2, 1, 3, 4].map((index, i) => {
           const img = images[index];
@@ -90,7 +89,6 @@ export const PropertyDetailsView = ({ propertyId }: PropertyDetailsViewProps) =>
         })}
       </div>
 
-      {/* Lightbox Modal with Framer Motion */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div 

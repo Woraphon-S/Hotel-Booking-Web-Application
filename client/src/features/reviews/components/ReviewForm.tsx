@@ -19,7 +19,6 @@ export const ReviewForm = ({ propertyId }: ReviewFormProps) => {
   const [hoveredRating, setHoveredRating] = React.useState(0);
   const queryClient = useQueryClient();
 
-  // Reviews require a booking: find one of the user's stayed/confirmed bookings for this property
   const { data: myBookings } = useQuery({
     queryKey: ['my-bookings'],
     queryFn: () => bookingService.getMyBookings(),
@@ -52,7 +51,6 @@ export const ReviewForm = ({ propertyId }: ReviewFormProps) => {
 
   if (!isAuthenticated) return null;
 
-  // Only guests who have a confirmed/completed booking at this property can review
   if (!eligibleBooking) {
     return (
       <div className="bg-white p-6 rounded-2xl border border-border shadow-sm mb-8 text-center text-sm text-muted-foreground">

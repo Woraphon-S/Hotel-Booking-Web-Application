@@ -27,14 +27,12 @@ export default function ProfilePage() {
   const { user } = useAuthStore();
   const [activeTab, setActiveTab] = React.useState<'bookings' | 'properties'>('bookings');
 
-  // Fetch Owner Properties
   const { data: properties } = useQuery({
     queryKey: ['owner-properties', user?.id],
     queryFn: () => ownerService.getMyProperties(user!.id),
     enabled: !!user && user.role === 'owner',
   });
 
-  // Fetch real booking history
   const { data: bookings, isLoading: isLoadingBookings } = useQuery({
     queryKey: ['my-bookings'],
     queryFn: () => bookingService.getMyBookings(),
@@ -45,7 +43,6 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
-      {/* Profile Header */}
       <div className="flex items-center gap-6 mb-12 bg-white p-8 rounded-3xl shadow-sm border border-border">
         <div className="w-20 h-20 bg-primary rounded-full flex-center text-white text-2xl font-bold">
           {user.first_name[0]}
@@ -59,7 +56,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Tabs */}
       <div className="flex gap-4 mb-8 border-b border-border">
         <button 
           onClick={() => setActiveTab('bookings')}
@@ -77,7 +73,6 @@ export default function ProfilePage() {
         )}
       </div>
 
-      {/* Tab Content */}
       <div className="space-y-6">
         {activeTab === 'bookings' ? (
           <div className="space-y-4">

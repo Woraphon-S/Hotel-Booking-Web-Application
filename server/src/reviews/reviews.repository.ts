@@ -19,7 +19,6 @@ export class ReviewsRepository {
 
   async create(data: any) {
     return this.db.transaction(async (client) => {
-      // 1. Create Review
       const res = await client.query(
         `INSERT INTO reviews (user_id, property_id, booking_id, rating, comment)
          VALUES ($1, $2, $3, $4, $5)
@@ -29,7 +28,6 @@ export class ReviewsRepository {
       
       const review = res.rows[0];
 
-      // 2. Update Property Average Rating
       await client.query(
         `UPDATE properties
          SET rating_avg = (SELECT AVG(rating) FROM reviews WHERE property_id = $1),
