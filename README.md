@@ -1,121 +1,138 @@
 <div align="center">
 
-# 🏨 HotelBooking — ระบบจองที่พักออนไลน์
+# HotelBooking
 
-แพลตฟอร์มจองโรงแรมและที่พักครบวงจร สำหรับ **ผู้เข้าพัก** ที่ต้องการค้นหา เปรียบเทียบ และจองที่พัก
-และ **เจ้าของที่พัก** ที่ต้องการลงประกาศและบริหารห้องพักของตนเอง ใช้งานเป็นภาษาไทย (สลับอังกฤษได้)
-
-![หน้าแรก](docs/screenshots/home-hero.png)
-
-</div>
-
----
-
-## แพลตฟอร์มนี้คืออะไร
-
-HotelBooking เป็นเว็บแอปพลิเคชันจองที่พักที่ออกแบบให้ทำงานเหมือนเว็บจองที่พักจริง รองรับผู้ใช้ 2 กลุ่ม:
-
-- **ผู้เข้าพัก (Traveler)** — เปิดดูและค้นหาที่พักได้ทันทีโดยไม่ต้องเข้าสู่ระบบ และจะเข้าสู่ระบบเมื่อต้องการจอง ชำระเงิน รีวิว หรือบันทึกรายการโปรด
-- **เจ้าของที่พัก (Owner)** — ลงประกาศที่พัก อัปโหลดรูป จัดการห้องพักและราคา ผ่านแผงควบคุมของตนเอง
-
-จุดเด่นคือกฎเบื้องหลังที่ดูแลความถูกต้องของข้อมูลโดยอัตโนมัติ เช่น การกันจองซ้ำ การคำนวณราคาฝั่งระบบ และการอนุญาตให้รีวิวเฉพาะผู้ที่เคยเข้าพักจริง
-
-<div align="center">
-
-![ทำไมต้องจองกับเรา](docs/screenshots/why-choose-us.png)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js%2016-000000?style=flat&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React%2019-20232A?style=flat&logo=react&logoColor=61DAFB)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS%20v4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=flat&logo=nestjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL%2015-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
 
 </div>
 
+A full-stack hotel and accommodation booking platform. Guests can search and compare properties,
+book rooms with real-time availability checks, pay to confirm, and review their stays — while
+property owners list and manage their own properties, rooms, and pricing from a dedicated dashboard.
+The interface is Thai by default and can switch to English.
+
+It is a two-sided platform built like a real booking site: a **Next.js** (App Router) + **React**
+frontend, a **NestJS** REST API, and a **PostgreSQL** database. The data layer is **raw parameterized
+SQL via `pg`** (no ORM, no query builder), and the database runs on **Docker**.
+
 ---
 
-## ✨ ฟีเจอร์หลัก
-
-### สำหรับผู้เข้าพัก
-
-| ฟีเจอร์ | รายละเอียด |
-| --- | --- |
-| 🔍 **ค้นหา & เปรียบเทียบ** | ค้นหาตามชื่อหรือจังหวัด กรองตามช่วงราคา/คะแนนรีวิว/สิ่งอำนวยความสะดวก จัดเรียงผลลัพธ์ และสลับดูแบบ **รายการ** หรือ **แผนที่** |
-| 🏨 **จองห้องพัก** | เลือกห้อง เลือกวันเข้าพัก–ออก ระบบคำนวณจำนวนคืนและราคารวมให้อัตโนมัติ พร้อมตรวจสอบห้องว่างก่อนยืนยันทุกครั้ง |
-| 💳 **ชำระเงิน & ติดตามสถานะ** | ชำระเงินเพื่อยืนยันการจอง และติดตามสถานะแต่ละการจองได้จากหน้าโปรไฟล์ |
-| ⭐ **รีวิวจากผู้เข้าพักจริง** | ให้คะแนนและเขียนรีวิวได้เฉพาะที่พักที่เคยจองและยืนยันแล้ว |
-| ❤️ **รายการโปรด** | บันทึกที่พักที่ชอบไว้กลับมาดูภายหลัง |
-| 🌐 **สองภาษา** | สลับการแสดงผลภาษาไทย / อังกฤษได้ |
-
-### สำหรับเจ้าของที่พัก
-
-| ฟีเจอร์ | รายละเอียด |
-| --- | --- |
-| 🏗️ **ลงประกาศที่พัก** | เพิ่มที่พัก กรอกรายละเอียด ที่อยู่ ราคา และเลือกสิ่งอำนวยความสะดวก |
-| 🖼️ **อัปโหลดรูปภาพ** | อัปโหลดรูปที่พักได้หลายรูป พร้อมเลือกรูปหลัก |
-| 🛏️ **จัดการห้องพัก & ราคา** | เพิ่ม/แก้ไขประเภทห้อง ราคาต่อคืน และจำนวนห้อง ผ่านแผงควบคุม |
-| 💬 **ตอบกลับรีวิว** | ตอบกลับรีวิวของผู้เข้าพักได้โดยตรง |
+## Screenshots
 
 <div align="center">
 
-![จุดหมายปลายทางยอดนิยม](docs/screenshots/popular-destinations.png)
-
-![ค้นหาและกรองที่พัก](docs/screenshots/search-results.png)
+![Home](images/home-hero.png)
 
 </div>
 
 <table>
-<tr>
-<td width="50%"><img src="docs/screenshots/favorites.png" alt="รายการโปรด" /></td>
-<td width="50%"><img src="docs/screenshots/login.png" alt="เข้าสู่ระบบ" /></td>
-</tr>
-<tr>
-<td align="center"><b>รายการที่พักที่บันทึกไว้</b></td>
-<td align="center"><b>เข้าสู่ระบบ / สมัครสมาชิก</b></td>
-</tr>
+  <tr>
+    <td width="50%"><img src="images/why-choose-us.png" alt="Why book with us" /></td>
+    <td width="50%"><img src="images/popular-destinations.png" alt="Popular destinations" /></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="images/search-results.png" alt="Search and filter" /></td>
+    <td width="50%"><img src="images/search-results-2.png" alt="Filter and sort results" /></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="images/favorites.png" alt="Saved properties" /></td>
+    <td width="50%"><img src="images/login.png" alt="Sign in" /></td>
+  </tr>
+  <tr>
+    <td colspan="2"><img src="images/owner-dashboard.png" alt="Property management dashboard" /></td>
+  </tr>
 </table>
 
 ---
 
-## 🧠 การทำงานเบื้องหลังที่ทำให้ระบบน่าเชื่อถือ
+## What it is
 
-- **ป้องกันการจองซ้ำ** — ก่อนสร้างการจองทุกครั้ง ระบบล็อกข้อมูลห้องและตรวจสอบห้องว่างภายในทรานแซกชันเดียว เพื่อไม่ให้ห้องเดียวกันถูกจองเกินจำนวนที่มีจริง แม้มีคำขอเข้ามาพร้อมกัน
-- **ราคาที่คำนวณจากฝั่งระบบ** — ยอดรวมคิดจากราคาห้องจริง × จำนวนคืน โดยระบบเป็นผู้คำนวณเอง ไม่อิงตัวเลขที่ส่งมาจากฝั่งผู้ใช้
-- **รีวิวที่เชื่อถือได้** — อนุญาตให้รีวิวเฉพาะผู้ที่เคยจองและยืนยันการจองแล้วเท่านั้น
-- **ขอบเขตสิทธิ์ตามบทบาท** — ผู้ใช้แต่ละคนเข้าถึงและจัดการได้เฉพาะข้อมูลของตนเอง เจ้าของที่พักแก้ไขได้เฉพาะที่พักของตน
-- **สถานะการจองที่ชัดเจน** — รอชำระเงิน → ยืนยันแล้ว → เข้าพักแล้ว → ยกเลิก ติดตามได้ทั้งสองฝ่าย
+HotelBooking serves two kinds of users:
+
+- **Travelers** — browse and search properties without signing in, and only log in when they want to
+  book, pay, review, or save favorites.
+- **Property owners** — list properties, upload photos, choose amenities, and manage rooms and pricing
+  through their own dashboard.
+
+The point of the project is the set of backend rules that keep the data correct automatically —
+preventing double bookings, computing prices on the server, and allowing reviews only from real guests.
 
 ---
 
-## 🛠️ เทคโนโลยีที่ใช้
+## Features
+
+### For travelers
+
+| Feature | Description |
+| --- | --- |
+| Search & compare | Search by name or province; filter by price, rating, and amenities; sort results; switch between list and map views |
+| Book a room | Pick a room and check-in/out dates; nights and total price are calculated automatically; availability is verified before every confirmation |
+| Pay & track status | Pay to confirm a booking and follow each booking's status from the profile page |
+| Verified reviews | Rate and write reviews only for properties you have actually booked and confirmed |
+| Favorites | Save properties you like and come back to them later |
+| Bilingual | Switch the interface between Thai and English |
+
+### For property owners
+
+| Feature | Description |
+| --- | --- |
+| List a property | Add a property with details, address, pricing, and amenities |
+| Upload images | Upload multiple property photos and choose a main image |
+| Manage rooms & pricing | Add and edit room types, per-night prices, and room counts from a dashboard |
+| Reply to reviews | Respond to guest reviews directly |
+
+---
+
+## How the platform stays reliable
+
+- **No double booking** — every booking opens a transaction, locks the room row to serialize
+  concurrent requests, and checks availability before inserting, so the same room is never overbooked.
+- **Server-side pricing** — the total is computed from the real room price and the number of nights on
+  the server; prices sent from the client are never trusted.
+- **Verified reviews** — only guests with a confirmed or completed booking for a property can review it.
+- **Role-based access** — each user can access only their own data, and owners can edit only their own
+  properties.
+- **Clear booking lifecycle** — pending, confirmed, completed, cancelled — visible to both guests and
+  owners.
+
+---
+
+## Tech stack
 
 ### Frontend
-| เทคโนโลยี | ใช้ทำอะไร |
+
+| Technology | Purpose |
 | --- | --- |
-| **Next.js 16** (App Router) + **React 19** | โครงสร้างเว็บและการจัดการเส้นทาง |
-| **TypeScript** | ความปลอดภัยของชนิดข้อมูล |
-| **Tailwind CSS v4** | จัดการสไตล์และ UI |
-| **Zustand** | จัดการ state ฝั่ง client (auth, รายการโปรด, ภาษา) แบบคงค่าไว้ |
-| **TanStack React Query** | ดึงและแคชข้อมูลจาก API |
-| **Axios** | เรียก API พร้อมแนบ token และ refresh token อัตโนมัติ |
-| **React Hook Form + Zod** | จัดการฟอร์มและตรวจสอบความถูกต้อง |
-| **Framer Motion** | แอนิเมชัน |
-| **Leaflet / React-Leaflet** | แสดงที่พักบนแผนที่ |
-| **Lucide React** | ไอคอน |
+| **Next.js 16** (App Router) + **React 19** | Web framework and routing |
+| **TypeScript** | Type safety |
+| **Tailwind CSS v4** | Styling and UI |
+| **Zustand** | Client-side state (auth, favorites, language) with persistence |
+| **TanStack React Query** | Data fetching and caching from the API |
+| **Axios** | HTTP client with automatic token attachment and refresh |
+| **React Hook Form + Zod** | Forms and validation |
+| **Framer Motion** | Animations |
+| **Leaflet / React-Leaflet** | Map view of properties |
+| **Lucide React** | Icons |
 
 ### Backend
-| เทคโนโลยี | ใช้ทำอะไร |
+
+| Technology | Purpose |
 | --- | --- |
-| **NestJS 11** + **TypeScript** | REST API แบบโมดูลาร์ (controller → service → repository) |
-| **PostgreSQL** ผ่าน **`pg`** | ฐานข้อมูล เขียน SQL เองโดยตรง (ไม่ใช้ ORM) |
-| **JWT + Passport** | ระบบยืนยันตัวตน (access + refresh token) |
-| **bcrypt** | เข้ารหัสรหัสผ่าน |
-| **Multer** | อัปโหลดรูปภาพที่พัก |
+| **NestJS 11** + **TypeScript** | Modular REST API (controller, service, repository) |
+| **PostgreSQL** via **`pg`** | Database accessed with hand-written SQL (no ORM) |
+| **JWT + Passport** | Authentication with access and refresh tokens |
+| **bcrypt** | Password hashing |
+| **Multer** | Property image uploads |
 
-### Database & Infrastructure
-| เทคโนโลยี | ใช้ทำอะไร |
+### Database & infrastructure
+
+| Technology | Purpose |
 | --- | --- |
-| **PostgreSQL 15** | ฐานข้อมูลหลัก |
-| **Docker / Docker Compose** | รันฐานข้อมูลและบริการต่าง ๆ ในคอนเทนเนอร์ |
-
----
-
-<div align="center">
-
-พัฒนาส่วนหน้าด้วย **Next.js + React** · ส่วนหลังด้วย **NestJS** · ฐานข้อมูล **PostgreSQL**
-
-</div>
+| **PostgreSQL 15** | Primary database |
+| **Docker / Docker Compose** | Runs the database and services in containers |
